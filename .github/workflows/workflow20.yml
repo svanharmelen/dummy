@@ -1,0 +1,19 @@
+name: build dummy
+
+on:
+  workflow_call:
+    inputs:
+      IMAGE_TAG:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build code
+        shell: bash
+        run: |
+          docker build --no-cache --pull --file ./Dockerfile --tag dummy:${{ inputs.IMAGE_TAG }} .

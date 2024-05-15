@@ -1,0 +1,25 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      IMAGE_TAG:
+        required: true
+        type: string
+
+jobs:
+  env:
+    TAG: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.IMAGE_TAG || '0.0.0-main' }}
+
+  workflow1:
+    uses: ./.github/workflows/workflow1.yml
+    secrets: inherit
+    with:
+      IMAGE_TAG: ${{ env.TAG }}
+  release:
+    needs:
+      - workflow1
+    uses: ./.github/workflows/workflow1.yml
+    secrets: inherit
+    with:
+      IMAGE_TAG: ${{ env.TAG }}
